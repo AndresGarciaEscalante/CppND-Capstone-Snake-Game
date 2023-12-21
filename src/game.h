@@ -6,10 +6,11 @@
 #include "controller.h"
 #include "renderer.h"
 #include "snake.h"
+#include "food.h"
 
 class Game {
  public:
-  Game(std::size_t grid_width, std::size_t grid_height);
+  Game(std::size_t grid_width, std::size_t grid_height, Food food);
   void Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
   void setInitialGameParameters();
@@ -19,7 +20,7 @@ class Game {
 
  private:
   Snake snake;
-  SDL_Point food;
+  Food food;
   std::string player_name;
   int number_foods;
 
