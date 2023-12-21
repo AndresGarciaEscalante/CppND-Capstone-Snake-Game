@@ -7,7 +7,7 @@
 class Snake {
  public:
   enum class Direction { kUp, kDown, kLeft, kRight };
-
+  enum class Velocity { kQ, kR };
   Snake(int grid_width, int grid_height)
       : grid_width(grid_width),
         grid_height(grid_height),

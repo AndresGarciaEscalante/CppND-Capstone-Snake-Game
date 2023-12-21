@@ -9,6 +9,11 @@ void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
   return;
 }
 
+void Controller::ChangeVelocity(Snake &snake, Snake::Velocity input) const {
+  (input == Snake::Velocity::kR ? snake.speed+= 0.05 : snake.speed-= 0.05);
+  return;
+}
+
 void Controller::HandleInput(bool &running, Snake &snake) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
@@ -34,6 +39,15 @@ void Controller::HandleInput(bool &running, Snake &snake) const {
         case SDLK_RIGHT:
           ChangeDirection(snake, Snake::Direction::kRight,
                           Snake::Direction::kLeft);
+          break;
+        // Case for Increasing the Shake Velocity          
+        case SDLK_r:
+          ChangeVelocity(snake,Snake::Velocity::kR);
+          break;
+        
+        // Case for Decreasing the Snake Velocity
+        case SDLK_q:
+          ChangeVelocity(snake,Snake::Velocity::kQ);
           break;
       }
     }
