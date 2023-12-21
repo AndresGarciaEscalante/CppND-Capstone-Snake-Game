@@ -7,8 +7,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
-  // Read the name of the player
-  std::cin >> player_name;
+  setInitialGameParameters();
   PlaceFood();
 }
 
@@ -84,6 +83,24 @@ void Game::Update() {
     snake.speed += 0.02;
   }
 }
+
+void Game::setInitialGameParameters(){
+  // Read the name of the player
+  // Welcome the player
+  std::cout << "  W   W  EEEEE  L      CCCCC   OOO   M     M  EEEEE\n";
+  std::cout << "  W   W  E      L     C       O   O  MM   MM  E    \n";
+  std::cout << "  W W W  EEEE   L     C       O   O  M M M M  EEEE \n";
+  std::cout << "  W W W  E      L     C       O   O  M  M  M  E    \n";
+  std::cout << "   W W   EEEEE  LLLLL  CCCCC   OOO   M     M  EEEEE\n";
+  std::cout << "---------------------------------------------------\n";
+  // Add the Initial paramters of the game
+  std::cout << "GAME INITIAL SETTINGS \n";
+  std::cout << "Insert the name of the player: ";
+  std::cin >> player_name;
+  std::cout << "Insert the desired number of foods in the game: ";
+  std::cin >> number_foods;
+}
+
 std::string Game::GetPlayerName() const {return player_name;}
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }

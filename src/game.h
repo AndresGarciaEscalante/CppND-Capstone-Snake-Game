@@ -12,6 +12,7 @@ class Game {
   Game(std::size_t grid_width, std::size_t grid_height);
   void Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
+  void setInitialGameParameters();
   std::string GetPlayerName() const;
   int GetScore() const;
   int GetSize() const;
@@ -20,6 +21,7 @@ class Game {
   Snake snake;
   SDL_Point food;
   std::string player_name;
+  int number_foods;
 
   std::random_device dev;
   std::mt19937 engine;
