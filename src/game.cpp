@@ -7,6 +7,8 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
+  // Read the name of the player
+  std::cin >> player_name;
   PlaceFood();
 }
 
@@ -82,6 +84,6 @@ void Game::Update() {
     snake.speed += 0.02;
   }
 }
-
+std::string Game::GetPlayerName() const {return player_name;}
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
