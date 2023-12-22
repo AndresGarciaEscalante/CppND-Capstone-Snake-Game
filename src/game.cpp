@@ -110,3 +110,10 @@ void Game::setInitialGameParameters(){
 std::string Game::GetPlayerName() const {return player_name;}
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+void Game::GetEndGameInformation(std::promise<gameInformation>&& promise){
+  gameInformation gameInfo;
+  gameInfo.player_name = GetPlayerName();
+  gameInfo.score = GetScore();
+  gameInfo.size = GetSize();
+  promise.set_value(gameInfo);
+}

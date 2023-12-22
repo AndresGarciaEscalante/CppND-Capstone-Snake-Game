@@ -4,6 +4,7 @@
 #include "renderer.h"
 #include "food.h"
 #include <memory>
+#include <future>
 
 int main() {
   constexpr std::size_t kFramesPerSecond{60};
@@ -18,8 +19,23 @@ int main() {
   Controller controller;
   Game game(kGridWidth, kGridHeight, std::move(food));
   game.Run(controller, renderer, kMsPerFrame);
-  std::cout << "Player: "<< game.GetPlayerName() <<" has terminated successfully!\n";
-  std::cout << "Score: " << game.GetScore() << "\n";
-  std::cout << "Size: " << game.GetSize() << "\n";
+
+  //Use promise - future to retrieve score 
+  std::promise<Game::gameInformation> myPromise;
+  std::future<Game::gameInformation> myFuture = myPromise.get_future();
+
+  // Start a thread to produce the result using the MyClass method
+  std::thread producer(&Game::GetEndGameInformation, &game, std::move(myPromise));
+  Game::gameInformation gameInfo = myFuture.get();
+  
+  // Printout the final Score
+  std::cout << "---------------------------------------------------\n";
+  std::cout << "END OF THE GAME !!! WELL DONE \n";
+  std::cout << "Player: "<< gameInfo.player_name <<" has terminated successfully!\n";
+  std::cout << "Score: " << gameInfo.score << "\n";
+  std::cout << "Size: " << gameInfo.size << "\n";
+
+  //thread barrier
+  producer.join();
   return 0;
 }
