@@ -2,11 +2,12 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height,Food food)
+Game::Game(std::size_t grid_width, std::size_t grid_height,std::unique_ptr<Food> food)
     : snake(grid_width, grid_height),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
-      random_h(0, static_cast<int>(grid_height - 1)) {
+      random_h(0, static_cast<int>(grid_height - 1)),
+      food_ptr(std::move(food)) {
   setInitialGameParameters();
   PlaceFood();
 }
@@ -26,7 +27,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food.getPosition(), food.getQuality());
+    renderer.Render(snake, food_ptr->getPosition(), food_ptr->getQuality());
 
     frame_end = SDL_GetTicks();
 
@@ -62,7 +63,7 @@ void Game::PlaceFood() {
       SDL_Point point;
       point.x = x;
       point.y = y;
-      food.setPosition(point);
+      food_ptr->setPosition(point);
       return;
     }
   }
@@ -77,13 +78,13 @@ void Game::Update() {
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if (food.getPosition().x == new_x && food.getPosition().y == new_y && food.getQuality() == Food::FoodQuality::High) {
+  if (food_ptr->getPosition().x == new_x && food_ptr->getPosition().y == new_y && food_ptr->getQuality() == Food::FoodQuality::High) {
     score = score + 3;
     PlaceFood();
     // Grow snake
     snake.GrowBody();
   }
-  else if (food.getPosition().x == new_x && food.getPosition().y == new_y && food.getQuality() == Food::FoodQuality::Low){
+  else if (food_ptr->getPosition().x == new_x && food_ptr->getPosition().y == new_y && food_ptr->getQuality() == Food::FoodQuality::Low){
     score++;
     PlaceFood();
     // Grow snake

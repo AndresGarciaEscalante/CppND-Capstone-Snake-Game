@@ -7,10 +7,11 @@
 #include "renderer.h"
 #include "snake.h"
 #include "food.h"
+#include <memory>
 
 class Game {
  public:
-  Game(std::size_t grid_width, std::size_t grid_height, Food food);
+  Game(std::size_t grid_width, std::size_t grid_height, std::unique_ptr<Food> food);
   void Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
   void setInitialGameParameters();
@@ -20,7 +21,7 @@ class Game {
 
  private:
   Snake snake;
-  Food food;
+  std::unique_ptr<Food> food_ptr;
   std::string player_name;
 
   std::random_device dev;
