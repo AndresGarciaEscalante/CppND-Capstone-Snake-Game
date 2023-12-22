@@ -22,7 +22,6 @@ class Game {
   Snake snake;
   Food food;
   std::string player_name;
-  int number_foods;
 
   std::random_device dev;
   std::mt19937 engine;

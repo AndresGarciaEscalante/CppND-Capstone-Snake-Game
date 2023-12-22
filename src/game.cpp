@@ -104,8 +104,6 @@ void Game::setInitialGameParameters(){
   std::cout << "GAME INITIAL SETTINGS \n";
   std::cout << "Insert the name of the player: ";
   std::cin >> player_name;
-  std::cout << "Insert the desired number of foods in the game: ";
-  std::cin >> number_foods;
 }
 
 std::string Game::GetPlayerName() const {return player_name;}
