@@ -26,7 +26,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food.getPosition());
+    renderer.Render(snake, food.getPosition(), food.getQuality());
 
     frame_end = SDL_GetTicks();
 
@@ -77,12 +77,18 @@ void Game::Update() {
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if (food.getPosition().x == new_x && food.getPosition().y == new_y) {
-    score++;
+  if (food.getPosition().x == new_x && food.getPosition().y == new_y && food.getQuality() == Food::FoodQuality::High) {
+    score = score + 3;
     PlaceFood();
-    // Grow snake and increase speed.
+    // Grow snake
     snake.GrowBody();
   }
+  else if (food.getPosition().x == new_x && food.getPosition().y == new_y && food.getQuality() == Food::FoodQuality::Low){
+    score++;
+    PlaceFood();
+    // Grow snake
+    snake.GrowBody();  
+  } 
 }
 
 void Game::setInitialGameParameters(){
