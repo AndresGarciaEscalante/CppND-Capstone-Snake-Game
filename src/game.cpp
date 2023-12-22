@@ -7,6 +7,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height,std::unique_ptr<Food>
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)),
+      random_f(0, static_cast<int>(0, 1)),
       food_ptr(std::move(food)) {
   setInitialGameParameters();
   PlaceFood();
@@ -57,6 +58,8 @@ void Game::PlaceFood() {
   while (true) {
     x = random_w(engine);
     y = random_h(engine);
+    food_ptr->setFoodQuality(food_ptr->randomlyChangeQuality(random_f, engine));
+    
     // Check that the location is not occupied by a snake item before placing
     // food.
     if (!snake.SnakeCell(x, y)) {
