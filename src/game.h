@@ -23,6 +23,7 @@ class Game {
   int GetScore() const;
   int GetSize() const;
   void GetEndGameInformation(std::promise<gameInformation>&& promise);
+  void timerFoodPosition();
 
  private:
   Snake snake;

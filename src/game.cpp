@@ -13,6 +13,28 @@ Game::Game(std::size_t grid_width, std::size_t grid_height,std::unique_ptr<Food>
   PlaceFood();
 }
 
+void Game::timerFoodPosition(){
+  Uint32 initial_timer = SDL_GetTicks();
+  Uint32 current_timer;
+  float time_difference;
+  int x, y;
+  SDL_Point point;
+  while (true){
+    current_timer = SDL_GetTicks();
+    time_difference = (current_timer - initial_timer) / 1000.f;
+    if(time_difference >= 5.0f){
+      x = random_w(engine);
+      y = random_h(engine);
+      point.x = x;
+      point.y = y;
+      food_ptr->setPosition(point);
+      time_difference = 0.0f;
+      initial_timer = SDL_GetTicks();
+      current_timer = 0;
+    }
+  }
+}
+
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
@@ -21,7 +43,10 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   Uint32 frame_duration;
   int frame_count = 0;
   bool running = true;
-
+  // Create background thread for changing food position
+  std::thread backgroundThread([this](){this->timerFoodPosition();});
+  // Detach the separate thread
+  backgroundThread.detach();
   while (running) {
     frame_start = SDL_GetTicks();
 
