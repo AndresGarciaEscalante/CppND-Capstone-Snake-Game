@@ -19,7 +19,7 @@ void Game::timerFoodPosition(){
   float time_difference;
   int x, y;
   SDL_Point point;
-  while (true){
+  while (snake.alive){
     current_timer = SDL_GetTicks();
     time_difference = (current_timer - initial_timer) / 1000.f;
     if(time_difference >= 5.0f){
