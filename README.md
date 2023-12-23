@@ -35,6 +35,7 @@ In this project, you can build your own C++ application or extend this Snake gam
 2. There are two types of food in the game, red ones score 3 points, while yellow ones only 1.
 3. Once the food is consumed by the snake, any of the two types of foods can appear in the game.
 4. Two Additional Keys were added, 'Q' makes the snake decrease its velocity, while 'R' makes the snake increase its velocity. WATCH OUT!! You can go go backwards if you press too much, which makes it even funnier. 
+5. Food now jumps randomly every 5 seconds.
 
 ## How to Play the game
 1. Once the program is executed, then put your name in the terminal.
@@ -79,7 +80,10 @@ In the following subsections only the criteria that are satisfied will be shown:
 - Only a child thread was created in the ```main.cpp```, the line of code is ```std::thread producer(&Game::GetEndGameInformation, &game, std::move(myPromise));```. This thread returns the final score when the player lost the game.
 
 2. **A promise and future is used in the project.**
-- This criteria is also satisfied in the ```main.cpp```, to be more precise in the following line ```  std::promise<Game::gameInformation> myPromise;```, ```std::future<Game::gameInformation> myFuture = myPromise.get_future();```, and line shown in the previous criteria. With this we can receive data from the method to the main program.
+- This criteria is also satisfied in the ```main.cpp```, to be more precise in the following line ```  std::promise<Game::gameInformation> myPromise;```, ```std::future<Game::gameInformation> myFuture = myPromise.get_future();```, and line shown in the previous criteria. With this we can receive data from the method to the main program. In addition to that future-promise have been implemented in the ```RenderSnake``` and ```RenderFood```, these are called in the ```Render``` function from the ```Render``` class.
+
+3. **A Mutex or lock is used in the project**
+- To handle the render from the ```RenderSnake``` and ```RenderFood```, then ```std::lock_guard<std::mutex>``` was used to protect the critical section which is generating the visualization.
 
 ## CC Attribution-ShareAlike 4.0 International
 
