@@ -73,10 +73,12 @@ void Renderer::Render(Snake const snake, SDL_Point const &food, Food::FoodQualit
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
-
-  // Clear screen
+  
+  { // Clear screen
+  std::lock_guard<std::mutex> lock(rendererMutex);  // Lock the mutex
   SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
   SDL_RenderClear(sdl_renderer);
+  }
 
   //Render food
   std::promise<void> promise_food;
@@ -86,11 +88,14 @@ void Renderer::Render(Snake const snake, SDL_Point const &food, Food::FoodQualit
   std::promise<void> promise_snake;
   std::future<void> ftr_snake = std::async(std::launch::async, [this,&promise_snake, snake, block](){this->RenderSnake(promise_snake,snake,block);});
 
-  // Update Screen
-  SDL_RenderPresent(sdl_renderer);
-
   ftr_food.wait();
   ftr_snake.wait(); 
+
+  { // Update Screen
+    std::lock_guard<std::mutex> lock(rendererMutex);  // Lock the mutex
+    SDL_RenderPresent(sdl_renderer);
+  }
+  
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
